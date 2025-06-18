@@ -150,7 +150,7 @@ export const searchConversations = query({
         .collect();
 
       const contentMatch = messages.some(message =>
-        message.content.toLowerCase().includes(args.searchTerm.toLowerCase())
+        message.content?.toLowerCase().includes(args.searchTerm.toLowerCase())
       );
 
       if (titleMatch || contentMatch) {

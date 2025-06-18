@@ -10,7 +10,7 @@ import { StreamId } from "@convex-dev/persistent-text-streaming";
 import { useMemo, useEffect } from "react";
 import { useChatStore } from "@/stores/chat";
 
-export function ChatMessage({ message, onBranch, onRegenerate, isLastUserMessage, onStreamingStatusChange }: {
+export function ChatMessage({ message, onBranch, onRegenerate, onStreamingStatusChange }: {
     message: Doc<"messages">,
     onBranch?: (messageId: Id<"messages">) => void,
     onRegenerate?: (data: {
@@ -30,10 +30,10 @@ export function ChatMessage({ message, onBranch, onRegenerate, isLastUserMessage
         if (onStreamingStatusChange) onStreamingStatusChange(status);
     }, [status, onStreamingStatusChange]);
 
-    const isStreaming = useMemo(() => {
-        if (!driven) return false;
-        return status === "streaming" || status === "pending";
-    }, [status, driven]);
+    // const isStreaming = useMemo(() => {
+    //     if (!driven) return false;
+    //     return status === "streaming" || status === "pending";
+    // }, [status, driven]);
 
     const displayMessage = useMemo(() => {
         if (message.role === "assistant") {
@@ -48,7 +48,7 @@ export function ChatMessage({ message, onBranch, onRegenerate, isLastUserMessage
     return <Message message={displayMessage} onBranch={onBranch} onRegenerate={onRegenerate} />;
 }
 
-function Message({ message, onBranch, onRegenerate, isLastUserMessage }: { message: Doc<"messages">, onBranch?: (messageId: Id<"messages">) => void, onRegenerate?: (data: { messageId: Id<"messages">, modelId?: Id<"models"> }) => void }) {
+function Message({ message, onBranch, onRegenerate }: { message: Doc<"messages">, onBranch?: (messageId: Id<"messages">) => void, onRegenerate?: (data: { messageId: Id<"messages">, modelId?: Id<"models"> }) => void }) {
     // Render attachments if present
     const attachments = (message.attachments || []) as Array<{
         url: string;
@@ -58,7 +58,7 @@ function Message({ message, onBranch, onRegenerate, isLastUserMessage }: { messa
     }>;
 
     return (
-        <div className={cn("space-y-1 group/message mb-4", isLastUserMessage && "min-h-[80vh]")}>
+        <div className={cn("space-y-1 group/message mb-4")}>
             <div key={message._id} className={cn(
                 "px-4 rounded-lg",
                 message.role === "user"
@@ -66,7 +66,7 @@ function Message({ message, onBranch, onRegenerate, isLastUserMessage }: { messa
                 message.role === "assistant" && ""
             )}>
                 <div className="whitespace-pre-wrap max-w-none">
-                    <Markdown>{message.content}</Markdown>
+                    <Markdown>{message.content || ""}</Markdown>
                 </div>
                 {/* Attachments rendering */}
                 {attachments.length > 0 && (

@@ -7,8 +7,6 @@ import {
     ArrowUpIcon,
     ChevronDownIcon,
     Loader2,
-    MicIcon,
-    MicOffIcon
 } from "lucide-react";
 import { ModelSelect } from "./model-select";
 import { useChatStore } from "@/stores/chat";

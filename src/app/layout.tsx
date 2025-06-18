@@ -4,7 +4,6 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 import ChatProvider from "@/components/providers/chat-provider";
-import { ReactScan } from "@/components/react-scan";
 
 
 const geistSans = Geist({

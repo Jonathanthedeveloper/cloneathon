@@ -11,15 +11,11 @@ export const create = mutation({
     description: v.optional(v.string())
   },
   handler: async (ctx, args) => {
-    const now = Date.now();
     return await ctx.db.insert("models", {
       providerId: args.providerId,
       name: args.name,
       features: args.features,
       description: args.description,
-      slug: args.slug,
-      createdAt: now,
-      updatedAt: now,
     });
   },
 });
@@ -114,7 +110,6 @@ export const update = mutation({
     const { id, ...updates } = args;
     return await ctx.db.patch(id, {
       ...updates,
-      updatedAt: Date.now(),
     });
   },
 });
@@ -136,7 +131,7 @@ export const listByFeature = query({
       .collect();
 
     return models.filter(model =>
-      model.features.includes(args.feature)
+      model.features?.includes(args.feature)
     );
   },
 });

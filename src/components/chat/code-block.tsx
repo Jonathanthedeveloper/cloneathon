@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Enhanced code-block.tsx with syntax highlighting
 'use client';
 
@@ -16,6 +17,7 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   node,
   inline,
   className,

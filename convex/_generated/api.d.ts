@@ -8,11 +8,6 @@
  * @module
  */
 
-import type {
-  ApiFromModules,
-  FilterApi,
-  FunctionReference,
-} from "convex/server";
 import type * as auth from "../auth.js";
 import type * as crons from "../crons.js";
 import type * as functions_api_keys from "../functions/api_keys.js";
@@ -33,6 +28,12 @@ import type * as limiter from "../limiter.js";
 import type * as tools_web_search from "../tools/web_search.js";
 import type * as utils_index from "../utils/index.js";
 import type * as utils_prompts from "../utils/prompts.js";
+
+import type {
+  ApiFromModules,
+  FilterApi,
+  FunctionReference,
+} from "convex/server";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -64,11 +65,185 @@ declare const fullApi: ApiFromModules<{
   "utils/index": typeof utils_index;
   "utils/prompts": typeof utils_prompts;
 }>;
+declare const fullApiWithMounts: typeof fullApi;
+
 export declare const api: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "public">
 >;
 export declare const internal: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "internal">
 >;
+
+export declare const components: {
+  persistentTextStreaming: {
+    lib: {
+      addChunk: FunctionReference<
+        "mutation",
+        "internal",
+        { final: boolean; streamId: string; text: string },
+        any
+      >;
+      createStream: FunctionReference<"mutation", "internal", {}, any>;
+      getStreamStatus: FunctionReference<
+        "query",
+        "internal",
+        { streamId: string },
+        "pending" | "streaming" | "done" | "error" | "timeout"
+      >;
+      getStreamText: FunctionReference<
+        "query",
+        "internal",
+        { streamId: string },
+        {
+          status: "pending" | "streaming" | "done" | "error" | "timeout";
+          text: string;
+        }
+      >;
+      setStreamStatus: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          status: "pending" | "streaming" | "done" | "error" | "timeout";
+          streamId: string;
+        },
+        any
+      >;
+    };
+  };
+  rateLimiter: {
+    lib: {
+      checkRateLimit: FunctionReference<
+        "query",
+        "internal",
+        {
+          config:
+            | {
+                capacity?: number;
+                kind: "token bucket";
+                maxReserved?: number;
+                period: number;
+                rate: number;
+                shards?: number;
+                start?: null;
+              }
+            | {
+                capacity?: number;
+                kind: "fixed window";
+                maxReserved?: number;
+                period: number;
+                rate: number;
+                shards?: number;
+                start?: number;
+              };
+          count?: number;
+          key?: string;
+          name: string;
+          reserve?: boolean;
+          throws?: boolean;
+        },
+        { ok: true; retryAfter?: number } | { ok: false; retryAfter: number }
+      >;
+      clearAll: FunctionReference<
+        "mutation",
+        "internal",
+        { before?: number },
+        null
+      >;
+      getServerTime: FunctionReference<"mutation", "internal", {}, number>;
+      getValue: FunctionReference<
+        "query",
+        "internal",
+        {
+          config:
+            | {
+                capacity?: number;
+                kind: "token bucket";
+                maxReserved?: number;
+                period: number;
+                rate: number;
+                shards?: number;
+                start?: null;
+              }
+            | {
+                capacity?: number;
+                kind: "fixed window";
+                maxReserved?: number;
+                period: number;
+                rate: number;
+                shards?: number;
+                start?: number;
+              };
+          key?: string;
+          name: string;
+          sampleShards?: number;
+        },
+        {
+          config:
+            | {
+                capacity?: number;
+                kind: "token bucket";
+                maxReserved?: number;
+                period: number;
+                rate: number;
+                shards?: number;
+                start?: null;
+              }
+            | {
+                capacity?: number;
+                kind: "fixed window";
+                maxReserved?: number;
+                period: number;
+                rate: number;
+                shards?: number;
+                start?: number;
+              };
+          shard: number;
+          ts: number;
+          value: number;
+        }
+      >;
+      rateLimit: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          config:
+            | {
+                capacity?: number;
+                kind: "token bucket";
+                maxReserved?: number;
+                period: number;
+                rate: number;
+                shards?: number;
+                start?: null;
+              }
+            | {
+                capacity?: number;
+                kind: "fixed window";
+                maxReserved?: number;
+                period: number;
+                rate: number;
+                shards?: number;
+                start?: number;
+              };
+          count?: number;
+          key?: string;
+          name: string;
+          reserve?: boolean;
+          throws?: boolean;
+        },
+        { ok: true; retryAfter?: number } | { ok: false; retryAfter: number }
+      >;
+      resetRateLimit: FunctionReference<
+        "mutation",
+        "internal",
+        { key?: string; name: string },
+        null
+      >;
+    };
+    time: {
+      getServerTime: FunctionReference<"mutation", "internal", {}, number>;
+    };
+  };
+};

@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { internalAction, internalMutation } from "../_generated/server";
 import { internal } from "../_generated/api";
-import { ModelFeature } from "@/types";
+import { ModelFeature } from "../../src/types";
 
 const NAME_EXTRACT_REGEX = /^(?:([^:]+):\s*)?(.+?)(?:\s+(?:Preview\s+)?\d{2}-\d{2})?$/;
 
