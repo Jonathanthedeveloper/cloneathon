@@ -43,6 +43,7 @@ export default function CustomisationSettings() {
         if (preferences) {
             form.reset(preferences)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [preferences])
 
     function onSubmit(values: z.infer<typeof formSchema>) {

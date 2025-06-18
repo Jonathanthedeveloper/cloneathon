@@ -43,19 +43,18 @@ export const getMessageHistory = internalQuery({
           }
           else if (msg.role === "user") {
 
-            const url = "https://www.healthyfood.com/wp-content/uploads/2017/03/Boy..-500x597.jpg";
             const attachments = msg.attachments?.map((a) => {
 
               if (a.type === "image") {
                 return {
                   type: a.type,
-                  image: url,
+                  image: a.url,
                 }
               }
               if (a.type === "file") {
                 return {
                   type: a.type,
-                  data: url,
+                  data: a.url,
                 }
               }
             }) || [];
