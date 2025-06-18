@@ -84,7 +84,7 @@ export default function AccountSettings() {
                 <div className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h4 className="font-medium">{profile?.plan || "N/A"} Plan</h4>
+                            <h4 className="font-medium">N/A</h4>
                             <p className="text-sm text-muted-foreground">
                                 Access to premium features and higher usage limits
                             </p>

@@ -141,7 +141,7 @@ export default function ModelsSettings() {
                     <div className="space-y-2">
                         {filteredModels.map((model) => {
                             const provider = getProviderInfo(model.providerId)
-                            const isEnabled = enabledModels.has(model.slug)
+                            const isEnabled = enabledModels.has(model._id)
 
                             return (
                                 <div
@@ -169,7 +169,7 @@ export default function ModelsSettings() {
                                                 </p>
                                             )}
                                             <div className="flex flex-wrap gap-1 mt-1">
-                                                {model.features.map((feature) => {
+                                                {model.features?.map((feature) => {
                                                     const featureInfo = features.find(f => f.id === feature)
                                                     const Icon = featureInfo?.icon || Bot
 
@@ -188,7 +188,7 @@ export default function ModelsSettings() {
                                     </div>
 
 
-                                    <Switch className="ml-8" checked={isEnabled} onCheckedChange={() => toggleModel(model.slug)} />
+                                    <Switch className="ml-8" checked={isEnabled} onCheckedChange={() => toggleModel(model._id)} />
                                 </div>
                             )
                         })}
@@ -209,7 +209,7 @@ export default function ModelsSettings() {
                     Disable All
                 </Button>
                 <Button variant="outline" onClick={() => {
-                    const allSlugs = new Set(filteredModels?.map(m => m.slug) || [])
+                    const allSlugs = new Set(filteredModels?.map(m => m._id) || [])
                     setEnabledModels(allSlugs)
                 }}>
                     Enable All
