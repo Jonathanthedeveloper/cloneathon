@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# T3 Chat Clone
+
+A multi-AI model chat application built with **Convex** and **Next.js**. This app allows users to chat with multiple AI providers, use real-time web search, upload attachments, generate images (optional), and more—all in one modern web interface.
+
+---
+
+## Features
+
+- Multi-provider AI chat (Gemini, Opena, etc.)
+- Tool calling (web search, etc.)
+- File and image attachments (images, PDFs)
+- Syntax highlighting for code
+- Resumable streaming (continue after refresh)
+- Chat branching
+- Bring Your Own Key (BYOK) for API keys
+- Voice input (speech-to-text)
+- Mobile responsive UI
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. **Clone the Repository**
+
+```bash
+git clone <your-repo-url>
+cd t3-chat-clone
+```
+
+### 2. **Install Dependencies**
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. **Set Up Environment Variables**
+
+Create a `.env.local` file in the root directory and add any required API keys:
+
+```.env
+CONVEX_DEPLOYMENT_URL=your-convex-url
+CONVEX_DEPLOYMENT_KEY=your-convex-key
+```
+
+### 4. **Convex Setup**
+
+- Install the Convex CLI if you haven't:
+
+  ```bash
+  npm install -g convex@latest
+  ```
+
+- Log in and link your project:
+
+  ```bash
+  npx convex dev
+  # Follow prompts to link or create a Convex project
+  ```
+
+- Add The following env variables to your convex project
+
+```.env
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET
+EXA_API_KEY=
+OPENROUTER_API_KEY=
+```
+
+### 5. **Run the App Locally**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Usage
 
-## Learn More
+- **Chat:** Start a new conversation and select your preferred AI model/tools.
+- **Attachments:** Upload images or PDFs to send as part of your message.
+- **Tool Calling:** Enable tools (web search, image, etc.) from the tool selector.
+- **Voice Input:** Click the microphone button to use speech-to-text.
+- **Branching:** Create alternative conversation paths from any message.
+- **Sharing:** Use the share button to copy a link to your conversation.
+- **Settings:** Manage API keys, preferences, and more in the settings panel.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Troubleshooting
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Convex errors:** Make sure your Convex project is linked and the schema is pushed.
+- **API errors:** Check your environment variables and API key validity.
+- **Rate limits:** If you see a rate limit error, wait a few minutes before retrying.
+- **Voice input:** Requires a supported browser (Chrome, Edge, Safari).
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Pull requests and issues are welcome! Please open an issue for bugs or feature requests.
+
+---
+
+## License
+
+MIT
