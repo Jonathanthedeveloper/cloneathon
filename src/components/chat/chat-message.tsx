@@ -23,7 +23,7 @@ export function ChatMessage({ message, onBranch, onRegenerate, onStreamingStatus
 
     const driven = useChatStore((state) => state.isDriven)(message._id);
 
-    const { text, status } = useStream(api.functions.chat.getStreamBody, new URL(`${getConvexSiteUrl()}chat/stream`), driven, message.streamId as StreamId)
+    const { text, status } = useStream(api.functions.chat.getStreamBody, new URL('chat/stream', getConvexSiteUrl()), driven, message.streamId as StreamId)
 
     // Notify parent of streaming status
     useEffect(() => {

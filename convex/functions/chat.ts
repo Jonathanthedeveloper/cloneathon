@@ -7,6 +7,7 @@ import { getProvider } from "../utils";
 import { smoothStream, streamText } from "ai"
 import { rateLimiter } from "../limiter";
 import { webSearch } from "../tools/web_search";
+import { PROMPTS } from "../utils/prompts";
 
 
 export const persistentTextStreaming = new PersistentTextStreaming(
@@ -118,7 +119,7 @@ export const create = mutation({
     },
 });
 
-export const streamChat = httpAction(async (ctx, request) => {
+export const streamChatV2 = httpAction(async (ctx, request) => {
 
     const body = (await request.json()) as {
         streamId: StreamId,
@@ -162,7 +163,6 @@ export const streamChat = httpAction(async (ctx, request) => {
                 const toolDescriptions: Record<string, string> = {
                     search: "You can use web search to answer questions with up-to-date information.",
                     
-                    // Add more tool descriptions here as you add more tools
                 };
                 const enabled = tools.map((t: string) => toolDescriptions[t] || t).join(" ");
                 systemPrompt = `You are a helpful assistant. ${enabled}`;
@@ -191,10 +191,9 @@ export const streamChat = httpAction(async (ctx, request) => {
                         console.log(JSON.stringify(step.reasoning, null, 2));
                     },
                     onError: (error) => {
-                        throw error //new Error(`Error during streaming: ${error.error instanceof Error ? error.error.message : String(error.error)}`);
+                        throw error 
                     },
                     onFinish: () => {
-                        // ... existing code ...
                     },
                     system: systemPrompt,
                 })
@@ -221,6 +220,87 @@ export const streamChat = httpAction(async (ctx, request) => {
                         }
                     }
                     await append(sourcesMarkdown);
+                }
+
+            } catch (error) {
+                console.error("Error streaming chat:", error);
+            }
+
+        }
+    )
+
+    // Set CORS headers appropriately.
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set("Vary", "Origin");
+    return response;
+})
+
+export const streamChat = httpAction(async (ctx, request) => {
+
+    const body = (await request.json()) as {
+        streamId: StreamId,
+    };
+
+    const config = await ctx.runQuery(internal.functions.chat.getChatConfig, {
+        streamId: body.streamId
+    });
+
+
+    const provider = getProvider({
+        provider: config.provider.slug,
+        apiKey: config.apiKey,
+    });
+
+    if (!provider) {
+        throw new Error("Invalid provider or API key");
+    }
+
+    const modelId = config.model.aggregatorId || config.model.nativeId;
+
+    if (!modelId) {
+        throw new Error("Model ID is required for streaming");
+    }
+
+    const response = await persistentTextStreaming.stream(ctx, request, body.streamId as StreamId,
+        async (ctx, request, streamId, append) => {
+            const { messages, tools } = await ctx.runQuery(internal.functions.messages.getMessageHistory, {
+                streamId
+            })
+
+
+          
+            try {
+                const { textStream, } = streamText({
+                    model: provider(modelId),
+                    messages,
+                    experimental_transform: smoothStream(),
+                    maxSteps: 3,
+                    providerOptions: {
+                        openrouter: {
+                            require_parameters: true,
+                            allow_fallbacks: true,
+                            include_reasoning: true,
+                        }
+                    },
+                    tools: {
+                        webSearch
+                    },
+                    toolChoice: tools.length > 0 ? "required" : "auto",
+                    toolCallStreaming: true,
+                    onStepFinish: () => {
+                        // TODO
+                    },
+                    onError: (error) => {
+                        throw error
+                    },
+                    onFinish: () => {
+                        // TODO
+                    },
+                    system: PROMPTS.default,
+                })
+
+                for await (const text of textStream) {
+                    await append(text);
                 }
 
             } catch (error) {
@@ -350,6 +430,7 @@ export const branch = mutation({
         const messageQuery = messages.map(async (msg) => {
             // Create new messages in the new conversation
             // Extract all properties except _id and _creationTime
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { _id: _omitId, _creationTime: _omitCreationTime, ...messageData } = msg;
             await ctx.db.insert("messages", {
                 ...messageData,
