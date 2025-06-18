@@ -6,20 +6,18 @@ import { useState } from 'react';
 import { Check, Copy, Download, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark, oneLight , } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneDark, oneLight, } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useTheme } from 'next-themes';
 
 interface CodeBlockProps {
-  node: any;
-  inline: boolean;
-  className: string;
+  node?: any;
+  className?: string;
   children: any;
 }
 
 export function CodeBlock({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   node,
-  inline,
   className,
   children,
   ...props
@@ -28,7 +26,8 @@ export function CodeBlock({
   const [wrapped, setWrapped] = useState(false);
   const { theme } = useTheme();
 
-  const language = className?.replace('language-', '') || 'text';
+  const match = /language-(\w+)/.exec(className || "");
+  const language = match?.[0]
   const code = String(children).replace(/\n$/, '');
 
   const copyToClipboard = async () => {
@@ -41,23 +40,24 @@ export function CodeBlock({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `code.${language === 'text' ? 'txt' : language}`;
+    a.download = `code.${match?.[1] || 'txt'}`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  if (!inline) {
+
+  if (language) {
     return (
       <div className="not-prose my-4 group">
         <div className="flex items-center justify-between bg-secondary border border-border rounded-t-lg px-4 py-1">
           <span className="text-xs font-medium text-muted-foreground uppercase">
-            {language}
+            {match?.[1]}
           </span>
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setWrapped(!wrapped)}
+              onClick={() => setWrapped(prev => !prev)}
               className="size-7 p-0"
             >
               {wrapped ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
@@ -80,32 +80,33 @@ export function CodeBlock({
             </Button>
           </div>
         </div>
-        
-        <SyntaxHighlighter
-          language={language}
-          style={theme === 'dark' ? oneDark : oneLight}
-          
-          customStyle={{
-            margin: 0,
-            borderRadius: '0 0 0.5rem 0.5rem',
-            border: '1px solid hsl(var(--border))',
-            borderTop: 'none',
-          }}
-          wrapLines={true}
-          wrapLongLines={true}
-          showLineNumbers={true}
-          
-          {...props}
-        >
-          {code}
-        </SyntaxHighlighter>
+        <div className='overflow-x-auto max-w-full'>
+          <SyntaxHighlighter
+            language={match?.[1]}
+            style={theme === 'dark' ? oneDark : oneLight}
+
+            customStyle={{
+              margin: 0,
+              borderRadius: '0 0 0.5rem 0.5rem',
+              border: '1px solid hsl(var(--border))',
+              borderTop: 'none',
+            }}
+            wrapLines={wrapped}
+            wrapLongLines={wrapped}
+            showLineNumbers={true}
+
+            {...props}
+          >
+            {code}
+          </SyntaxHighlighter>
+        </div>
       </div>
     );
   }
 
   return (
     <code
-      className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-foreground"
+      className="bg-accent px-1.5 py-0.5 rounded text-sm font-mono text-foreground"
       {...props}
     >
       {children}

@@ -1,7 +1,7 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI, } from "@ai-sdk/openai";
 import { createCohere } from '@ai-sdk/cohere';
-import { createOpenRouter, OpenRouterProvider } from '@openrouter/ai-sdk-provider';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 
 
 

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 import ChatProvider from "@/components/providers/chat-provider";
+import { Toaster } from "sonner";
 
 
 const geistSans = Geist({
@@ -42,6 +43,7 @@ export default function RootLayout({
             <ChatProvider>
               {children}
             </ChatProvider>
+            <Toaster richColors/>
           </ThemeProvider>
         </ConvexClientProvider>
       </body>
