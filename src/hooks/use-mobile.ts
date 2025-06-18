@@ -1,3 +1,4 @@
+"use client"
 import { useMediaQuery } from "@uidotdev/usehooks"
 
 const MOBILE_BREAKPOINT = 768

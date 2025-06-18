@@ -1,6 +1,8 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const SettingsContext = createContext(null)
+type SettingsContextType = { compactMode: boolean; setCompactMode: Dispatch<SetStateAction<boolean>>; }
+
+const SettingsContext = createContext<SettingsContextType | null>(null)
 
 
 export function SettingsProvider({
@@ -15,8 +17,8 @@ export function SettingsProvider({
 
 
 
-    useEffect(()=> {
-        if(compactMode){
+    useEffect(() => {
+        if (compactMode) {
             document.documentElement.classList.add('compact');
         }
     })
