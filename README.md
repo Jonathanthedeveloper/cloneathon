@@ -23,8 +23,8 @@ A multi-AI model chat application built with **Convex** and **Next.js**. This ap
 ### 1. **Clone the Repository**
 
 ```bash
-git clone <your-repo-url>
-cd t3-chat-clone
+git clone https://github.com/Jonathanthedeveloper/cloneathon
+cd cloneathon
 ```
 
 ### 2. **Install Dependencies**
