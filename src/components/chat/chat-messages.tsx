@@ -4,24 +4,13 @@ import { api } from "../../../convex/_generated/api";
 import { useParams } from "next/navigation";
 import { Id } from "../../../convex/_generated/dataModel";
 import { ChatMessage } from "./chat-message";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useChatContext } from "../providers/chat-provider";
 import { useChatStore } from "@/stores/chat";
 import { handleMutationError } from "@/lib/utils";
 
-function TypingIndicator() {
-    return (
-        <div className="flex items-center gap-2 px-4 py-2">
-            <span className="text-muted-foreground text-sm">Assistant is typing</span>
-            <span className="flex gap-1">
-                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></span>
-                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></span>
-            </span>
-        </div>
-    );
-}
+
 
 export function ChatMessages() {
     const params = useParams();
@@ -87,31 +76,19 @@ export function ChatMessages() {
         }
     }
 
-    // Find the last assistant message index
-    const lastAssistantIndex = useMemo(() => {
-        if (!messages || messages.length === 0) return -1;
-        for (let i = messages.length - 1; i >= 0; i--) {
-            if (messages[i].role === "assistant") return i;
-        }
-        return -1;
-    }, [messages]);
 
-    // Track streaming status of the last assistant message
-    const [lastAssistantStreamingStatus, setLastAssistantStreamingStatus] = useState<string>("");
 
-    return <div className="flex-1 overflow-y-auto  pt-10">
+    return <div className="flex-1 overflow-y-auto overflow-x-hidden pt-10">
         <div className="max-w-2xl w-full mx-auto mb-32 flex flex-col gap-3 scroll-mb-32" ref={messageContainerRef}>
             <div>
-                {messages?.map((msg, index) => (
+                {messages?.map((msg) => (
                     <ChatMessage
                         key={msg._id}
                         message={msg}
                         onBranch={handleBranchMessage}
                         onRegenerate={handleRegenerate}
-                        {...(index === lastAssistantIndex ? { onStreamingStatusChange: setLastAssistantStreamingStatus } : {})}
                     />
                 ))}
-                {lastAssistantStreamingStatus === "pending" && <TypingIndicator />}
             </div>
             <div id="messages-end" ref={messagesEndRef} />
         </div>

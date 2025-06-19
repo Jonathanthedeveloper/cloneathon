@@ -7,10 +7,22 @@ import { Markdown } from "./markdown";
 import { useStream } from "@convex-dev/persistent-text-streaming/react";
 import { api } from "../../../convex/_generated/api";
 import { StreamId } from "@convex-dev/persistent-text-streaming";
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import { useChatStore } from "@/stores/chat";
 
-export function ChatMessage({ message, onBranch, onRegenerate, onStreamingStatusChange }: {
+function TypingIndicator() {
+    return (
+        <div className="flex items-center gap-2 px-4 py-2">
+            <span className="flex gap-1">
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></span>
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></span>
+            </span>
+        </div>
+    );
+}
+
+export function ChatMessage({ message, onBranch, onRegenerate }: {
     message: Doc<"messages">,
     onBranch?: (messageId: Id<"messages">) => void,
     onRegenerate?: (data: {
@@ -18,17 +30,13 @@ export function ChatMessage({ message, onBranch, onRegenerate, onStreamingStatus
         modelId?: Id<"models">;
     }) => void,
     isLastUserMessage?: boolean,
-    onStreamingStatusChange?: (status: string) => void
 }) {
 
     const driven = useChatStore((state) => state.isDriven)(message._id);
 
     const { text, status } = useStream(api.functions.chat.getStreamBody, new URL('chat/stream', getConvexSiteUrl()), driven, message.streamId as StreamId)
 
-    // Notify parent of streaming status
-    useEffect(() => {
-        if (onStreamingStatusChange) onStreamingStatusChange(status);
-    }, [status, onStreamingStatusChange]);
+
 
     // const isStreaming = useMemo(() => {
     //     if (!driven) return false;
@@ -45,6 +53,17 @@ export function ChatMessage({ message, onBranch, onRegenerate, onStreamingStatus
         return message;
     }, [message, text]);
 
+
+    if(status === "pending") {
+        <TypingIndicator/>
+    }
+
+    if(status === "error") {
+        return <div>An error occured</div>
+    }
+
+    
+
     return <Message message={displayMessage} onBranch={onBranch} onRegenerate={onRegenerate} />;
 }
 
@@ -56,6 +75,8 @@ function Message({ message, onBranch, onRegenerate }: { message: Doc<"messages">
         mimeType?: string;
         name?: string;
     }>;
+
+
 
     return (
         <div className={cn("space-y-1 group/message mb-4")}>

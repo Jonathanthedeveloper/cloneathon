@@ -41,7 +41,7 @@ const TooltipButton = forwardRef<HTMLButtonElement, TooltipButtonProps>(
   }, ref) => {
     return (
       <TooltipProvider >
-        <Tooltip delayDuration={1200}>
+        <Tooltip delayDuration={800} >
           <TooltipTrigger asChild>
             <Button
               ref={ref}
@@ -58,7 +58,7 @@ const TooltipButton = forwardRef<HTMLButtonElement, TooltipButtonProps>(
               />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side={side} sideOffset={sideOffset}>
+          <TooltipContent side={side} sideOffset={sideOffset} className="bg-accent text-accent-foreground">
             <p>{tooltip}</p>
           </TooltipContent>
         </Tooltip>
