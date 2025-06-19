@@ -1,40 +1,6 @@
 import { query } from "../_generated/server";
 import { v } from "convex/values";
 
-// Get complete conversation data with messages and model info
-export const getConversationWithMessages = query({
-  args: { conversationId: v.id("conversations") },
-  handler: async (ctx, args) => {
-    const conversation = await ctx.db.get(args.conversationId);
-    if (!conversation) return null;
-
-    const messages = await ctx.db
-      .query("messages")
-      .withIndex("byConversation", (q) => q.eq("conversationId", args.conversationId))
-      .order("asc")
-      .collect();
-
-    const messagesWithModels = await Promise.all(
-      messages.map(async (message) => {
-        const model = message.modelId ? await ctx.db.get(message.modelId) : null;
-        const provider = model ? await ctx.db.get(model.providerId) : null;
-        
-        return {
-          ...message,
-          model: model ? {
-            ...model,
-            provider,
-          } : null,
-        };
-      })
-    );
-
-    return {
-      ...conversation,
-      messages: messagesWithModels,
-    };
-  },
-});
 
 export const getUserAvailableModels = query({
   args: { userId: v.id("users") },

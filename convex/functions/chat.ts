@@ -11,7 +11,7 @@ import { PROMPTS } from "../utils/prompts";
 
 
 export const persistentTextStreaming = new PersistentTextStreaming(
-    components.persistentTextStreaming
+    components.persistentTextStreaming,
 );
 
 
