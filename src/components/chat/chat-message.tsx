@@ -83,10 +83,10 @@ function Message({ message, onBranch, onRegenerate }: { message: Doc<"messages">
             <div key={message._id} className={cn(
                 "p-4 rounded-lg",
                 message.role === "user"
-                && "bg-secondary/50  border border-secondary/50 text-secondary-foreground max-w-[80%] ml-auto",
+                && "bg-secondary/50  border border-secondary/50 text-secondary-foreground max-w-[80%] overflow-hidden ml-auto",
                 message.role === "assistant" && ""
             )}>
-                <div className="whitespace-pre-wrap max-w-none">
+                <div className="whitespace-pre-wrap max-w-full break-words">
                     <Markdown>{message.content || ""}</Markdown>
                 </div>
                 {/* Attachments rendering */}

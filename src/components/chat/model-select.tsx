@@ -116,9 +116,9 @@ export function ModelSelect({
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="ghost" className="md:max-w-full w-max justify-start truncate text-xs sm:text-sm md:text-base">
+          <Button variant="ghost" className=" max-w-[100px] md:max-w-full w-max justify-start truncate text-xs sm:text-sm md:text-base">
 
-            <span>{selectedModel ? <>{selectedModel}</> : <>Select Model</>}</span>
+            <span className="truncate">{selectedModel ? <>{selectedModel}</> : <>Select Model</>}</span>
             <ChevronDownIcon className="ml-auto h-4 w-4" />
           </Button>
         </PopoverTrigger>
@@ -132,10 +132,10 @@ export function ModelSelect({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="ghost" size="sm" className="md:max-w-full w-max justify-start truncate text-xs sm:text-sm md:text-base">
-          <span>{selectedModel ? <>{selectedModel}</> : <>Select Model</>}</span>
-          <ChevronDownIcon className="ml-auto h-4 w-4" />
-        </Button>
+        <Button variant="ghost" className=" max-w-[100px] md:max-w-full w-max justify-start truncate text-xs sm:text-sm md:text-base">
+            <span className="truncate">{selectedModel ? <>{selectedModel}</> : <>Select Model</>}</span>
+            <ChevronDownIcon className="ml-auto h-4 w-4" />
+          </Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mt-4 border-t">

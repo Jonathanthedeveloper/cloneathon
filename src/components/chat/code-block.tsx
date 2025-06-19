@@ -48,12 +48,12 @@ export function CodeBlock({
 
   if (language) {
     return (
-      <div className="not-prose my-4 group">
+      <div className="not-prose my-4 group max-w-full overflow-hidden">
         <div className="flex items-center justify-between bg-secondary border border-border rounded-t-lg px-4 py-1">
           <span className="text-xs font-medium text-muted-foreground uppercase">
             {match?.[1]}
           </span>
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
             <Button
               variant="ghost"
               size="sm"
@@ -106,7 +106,7 @@ export function CodeBlock({
 
   return (
     <code
-      className="bg-accent px-1.5 py-0.5 rounded text-sm font-mono text-foreground"
+      className="bg-accent px-1.5 py-0.5 rounded text-sm font-mono text-accent-foreground"
       {...props}
     >
       {children}
