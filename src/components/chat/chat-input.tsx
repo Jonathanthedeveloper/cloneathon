@@ -142,7 +142,7 @@ export function ChatInput() {
                         placeholder={dragActive ? "Drop files here..." : "Type your message..."}
                     />
                     <div className="flex items-center justify-between ">
-                        <div className="display flex items-center gap-2">
+                        <div className="display flex items-center md:gap-2">
                             <ModelSelect modelId={modelId} onSetModelId={setModelId} />
                             <FileUpload />
                             <ToolSelect onToolChange={(tool) => tool !== null && setTools((prev) => [...prev, tool])} />

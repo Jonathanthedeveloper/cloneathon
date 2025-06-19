@@ -46,7 +46,7 @@ export function SettingsModal() {
     }
 
     return (
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground >
             <DrawerTrigger asChild>
                 <Button size="icon" variant="ghost">
                     <SettingsIcon />

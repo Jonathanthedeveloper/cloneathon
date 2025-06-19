@@ -86,7 +86,7 @@ export default function Settings({ activeTab,
                 </li>
             ))}
         </ul>
-        <div className={cn("overflow-y-auto",!activeTab && "hidden")}>
+        <div className={cn("overflow-y-auto h-full",!activeTab && "hidden")}>
             {
                 tabs.find(tab => tab.value === activeTab)?.content || <div>Select a tab to view content</div>
             }

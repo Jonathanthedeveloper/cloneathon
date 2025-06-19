@@ -162,7 +162,7 @@ export const streamChatV2 = httpAction(async (ctx, request) => {
             if (tools && tools.length > 0) {
                 const toolDescriptions: Record<string, string> = {
                     search: "You can use web search to answer questions with up-to-date information.",
-                    
+
                 };
                 const enabled = tools.map((t: string) => toolDescriptions[t] || t).join(" ");
                 systemPrompt = `You are a helpful assistant. ${enabled}`;
@@ -191,7 +191,7 @@ export const streamChatV2 = httpAction(async (ctx, request) => {
                         console.log(JSON.stringify(step.reasoning, null, 2));
                     },
                     onError: (error) => {
-                        throw error 
+                        throw error
                     },
                     onFinish: () => {
                     },
@@ -268,7 +268,7 @@ export const streamChat = httpAction(async (ctx, request) => {
             })
 
 
-          
+
             try {
                 const { textStream, } = streamText({
                     model: provider(modelId),
@@ -282,7 +282,7 @@ export const streamChat = httpAction(async (ctx, request) => {
                             include_reasoning: true,
                         }
                     },
-                    tools: {
+                    tools: tools.length <= 0 ? undefined : {
                         webSearch
                     },
                     toolChoice: tools.length > 0 ? "required" : "auto",

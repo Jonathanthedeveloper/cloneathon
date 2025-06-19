@@ -46,7 +46,7 @@ export function ToolSelect({ value, onToolChange }: ToolSelectProps) {
   return <>
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost"> <Settings2Icon /> {!selectedTool && "Tools"}</Button>
+        <Button variant="ghost" className="size-9 md:size-auto"> <Settings2Icon /> <span className="hidden md:inline-block">{!selectedTool && "Tools"}</span></Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-background">
         <DropdownMenuLabel>Tools</DropdownMenuLabel>
@@ -61,7 +61,7 @@ export function ToolSelect({ value, onToolChange }: ToolSelectProps) {
     </DropdownMenu>
     <Separator orientation="vertical" />
 
-    {selectedTool && <Button className="rounded-full mr-2" size="sm" variant="ghost" onClick={() => handleToolChange(null)}>
+    {selectedTool && <Button className="rounded-full mr-1 md:mr-2" size="sm" variant="ghost" onClick={() => handleToolChange(null)}>
       {selectedTool && (() => {
         const tool = tools.find(t => t.value === selectedTool);
         if (!tool) return null;

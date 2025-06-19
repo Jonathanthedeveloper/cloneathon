@@ -15,8 +15,9 @@ const components: Partial<Components> = {
   code: ({children, ...props }) => <CodeBlock {...props}>{children}</CodeBlock>,
   pre: ({ children , ...props}) => <pre className="overflow-x-auto max-w-full" {...props}>{children}</pre>,
   hr: ({...props }) => <hr className="border-t border-border bg-border" {...props} />,
-  ul: ({children, ...props}) => <ul {...props} className='list-disc list-inside ml-4'>{children}</ul>,
+  ul: ({children, ...props}) => <ul {...props} className='list-disc list-outside ml-4'>{children}</ul>,
   ol: ({children, ...props}) => <ol {...props} className='list-decimal list-inside ml-4'>{children}</ol>,
+  li: ({children, ...props}) => <li {...props} className='inline-block'>{children}</li>,
    // Tables
    table: ({ children, ...props }) => (
     <div className="my-4 overflow-x-auto max-w-full relative">
